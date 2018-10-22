@@ -3,6 +3,8 @@ const multer = require("multer")
 const fs = require("fs")
 const app = express();
 
+// stuff and biz
+
 const port = 3000;
 const publicPath = "public/";
 const uploadPath = './public/uploads';
