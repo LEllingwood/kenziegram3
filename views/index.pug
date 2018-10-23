@@ -1,6 +1,7 @@
 html
     head      
         title= title
+        script(src='/index.js')
     body
         h1= "Welcome to Kenziegram!"
         
@@ -14,7 +15,9 @@ html
             div
                     button(type="submit") Send the file
             
-        ul
+        ul(id="imagesContainer")
             each val in imagePathArray
                 li 
                     img(src="/uploads/" + val, width=300)
+
+        
