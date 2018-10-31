@@ -9,8 +9,17 @@ const uploadPath = './public/uploads';
 
 app.use(express.static(publicPath));
 app.use(express.json())
+let storage = multer.diskStorage({
+    destination: function(request, file, cb){
+        cb(null, uploadPath)
+    },
+    filename: function(request, file, cb){
+        cb(null, Date.now() + "")
+    }
+})
 const upload = multer({
-    dest: uploadPath
+    storage: storage,
+
 })
 app.set("views", "./views")
 app.set("view engine", "pug")
@@ -24,10 +33,11 @@ app.set("view engine", "pug")
 app.get("/", function (request, response) {
     fs.readdir(uploadPath, function (err, items) {
         console.log(items);
+
         response.render("index", {
             title: "Hey",
             message: "this is a message",
-            imagePathArray: items
+            imagePathArray: items.reverse()
         });
     });
 })
@@ -47,7 +57,7 @@ app.post('/latest', function (request, response, next) {
         imageNames.forEach(image => {
             let imageUploadedTime = fs.statSync(`public/uploads/${image}`).mtimeMs;
             if (imageUploadedTime > lastImageClientSaw) {
-                newImagesArray.push(image)
+                newImagesArray.unshift(image)
             }
             if (imageUploadedTime > highestTimeStamp) {
                 highestTimeStamp = imageUploadedTime
